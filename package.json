@@ -1,0 +1,25 @@
+{
+  "name": "socialnetworkapi",
+  "version": "1.0.0",
+  "description": "Social Network API",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "seed": "node utils/seed.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brooksrosenberg/socialNetworkAPI.git"
+  },
+  "author": "Brooks Rosenberg",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/brooksrosenberg/socialNetworkAPI/issues"
+  },
+  "homepage": "https://github.com/brooksrosenberg/socialNetworkAPI#readme",
+  "dependencies": {
+    "express": "^4.17.3",
+    "mongoose": "^6.2.6"
+  }
+}
