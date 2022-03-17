@@ -1,12 +1,5 @@
 const { Thought, User } = require('../models');
 
-// Aggregate function to get the number of reactions overall
-const reactionCount = async () =>
-  Thought.aggregate()
-    .count('reactionCount')
-    .then((numberOfStudents) => numberOfStudents);
-
-
 module.exports = {
   // Get all thoughts
   getThoughts(req, res) {
@@ -27,7 +20,7 @@ module.exports = {
   getSingleThought(req, res) {
     Thought.findOne({ _id: req.params.thoughtId })
       .select('-__v')
-      .then((thought) =>
+      .then((thought) => 
         !thought
           ? res.status(404).json({ message: 'No thought with that ID' })
           : res.json({thought})
@@ -41,6 +34,13 @@ module.exports = {
   // create a new thought
   createThought(req, res) {
     Thought.create(req.body)
+    .then((thought) => {
+          return User.findOneAndUpdate(
+              { _id: req.params.userId },
+              { $push: { thought: req.params.thoughtId } },
+              { new: true }
+            );
+          })
       .then((thought) => res.json(thought))
       .catch((err) => res.status(500).json(err));
   },
@@ -93,13 +93,17 @@ module.exports = {
       { $addToSet: { reactions: req.body } },
       { runValidators: true, new: true }
     )
-      .then((thought) =>
-        !thought
-          ? res
-              .status(404)
-              .json({ message: 'No thought found with that ID :(' })
-          : res.json(thought)
-      )
+      .then((thought) => {
+        // !thought
+        //   ? res
+        //       .status(404)
+        //       .json({ message: 'No thought found with that ID :(' })
+        //   : res.json(thought)
+        if(!thought){
+            return res.status(404).json({message: "no thought exists"});
+        }
+        res.json(thought);
+      })
       .catch((err) => res.status(500).json(err));
   },
   // Remove reaction from a thought
@@ -109,13 +113,13 @@ module.exports = {
       { $pull: { reaction: { reactionId: req.params.reactionId } } },
       { runValidators: true, new: true }
     )
-      .then((thought) =>
-        !thought
-          ? res
-              .status(404)
-              .json({ message: 'No thought found with that ID :(' })
-          : res.json(thought)
-      )
-      .catch((err) => res.status(500).json(err));
-  },
-};
+      .then((thought) => {
+        if(!thought){
+          return res.status(404)
+              .json({ message: 'No thought found with that ID' })
+        }
+        res.json(thought)
+      })
+  .catch((err) => res.status(500).json(err));
+},
+}

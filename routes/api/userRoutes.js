@@ -18,10 +18,10 @@ router.route('/:userId').get(getSingleUser).delete(deleteUser);
 // /api/users/:userId
 router.route('/:userId').get(getSingleUser).put(updateUser);
 
-// /api/users/:userId/thought
-// router.route('/:userId/thought').post(addFriend);
+// /api/users/:userId/friends
+router.route('/:userId/friends/:friendsId').post(addFriend);
 
-// // /api/users/:userId/thoughts/:thoughtId
-// router.route('/:userId/thought/:thoughtId').delete(removeFriend);
+// /api/users/:userId/friends/:friendId
+router.route('/:userId/friends/:friendsId').delete(removeFriend);
 
 module.exports = router;
