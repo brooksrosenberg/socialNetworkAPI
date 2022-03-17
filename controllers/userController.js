@@ -57,7 +57,6 @@ module.exports = {
         {_id: req.params.userId},
         { $addToSet: { friends: req.params.friendsId}},
         { new: true })
-    res.json(`New friend added successfully`)
     .then((user) =>
         !user
           ? res.status(404).json({ message: 'No user with this id!' })
@@ -70,7 +69,6 @@ module.exports = {
           {_id: req.params.userId},
           { $pull: { friends: req.params.friendsId}},
           { new: true })
-      res.json(`Friend removed successfully`)
       .then((user) =>
           !user
             ? res.status(404).json({ message: 'No user with this id!' })
